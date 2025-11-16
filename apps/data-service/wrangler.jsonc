@@ -11,4 +11,31 @@
 	"observability": {
 		"enabled": true,
 	},
+	"d1_databases": [
+	    {
+			"binding": "DB",
+			"database_id": "ceca6732-3155-43ad-aa3c-e50279090916",
+			"remote": true
+		  }	
+	],
+	"kv_namespaces": [
+		{
+			"binding": "CACHE",
+			"id": "9938082e883641dd8747a81ead95ba42",
+			"remote": true
+		}
+	],
+	"queues": {
+		"consumers": [
+			{
+				"queue": "smart-links-data-queue-stage",
+			}
+		],
+		"producers": [
+			{
+				"binding": "QUEUE",
+				"queue": "smart-links-data-queue-stage",
+			}
+		]
+	}
 }

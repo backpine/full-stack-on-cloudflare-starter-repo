@@ -1,7 +1,8 @@
 import { getDb } from "@/db/database";
-import { links } from "@/drizzle-out/schema";
+import {  linkClicks, links } from "@/drizzle-out/schema";
 import { CreateLinkSchemaType, destinationsSchema, DestinationsSchemaType, linkSchema } from "@/zod/links";
-import { and, desc, eq, gt } from "drizzle-orm";
+import { LinkClickMessageType } from "@/zod/queue";
+import { and, count, desc, eq, gt, max, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
 export async function createLink(  data: CreateLinkSchemaType & { accountId: string },
@@ -16,6 +17,7 @@ export async function createLink(  data: CreateLinkSchemaType & { accountId: str
         destinations: JSON.stringify(data.destinations),
     })
     return id;
+
 }
 
 export async function getLinks(accountId: string, createdBefore?: string) {
@@ -60,6 +62,7 @@ export async function getLinks(accountId: string, createdBefore?: string) {
       .where(eq(links.linkId, linkId));
   }
   
+
   export async function getLink(linkId: string) {
     const db = getDb();
   
@@ -95,4 +98,17 @@ export async function getLinks(accountId: string, createdBefore?: string) {
         updated: new Date().toISOString(),
       })
       .where(eq(links.linkId, linkId));
+  }
+
+  export async function addLinkClick(info: LinkClickMessageType["data"]) {
+    const db = getDb();
+    await db.insert(linkClicks).values({
+      id: info.id,
+      accountId: info.accountId,
+      destination: info.destination,
+      country: info.country,
+      clickedTime: info.timestamp,
+      latitude: info.latitude,
+      longitude: info.longitude,
+    });
   }
