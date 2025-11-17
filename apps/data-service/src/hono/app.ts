@@ -6,9 +6,7 @@ import { Hono } from 'hono';
 import { getRoutingDestinations } from './helpers/route-ops';
 
 
-
 export const App = new Hono<{ Bindings: Env }>();
-
 
 App.get('/:id', async (c) => {
     const id = c.req.param('id');
@@ -43,3 +41,4 @@ App.get('/:id', async (c) => {
     )
     return c.redirect(destination)
 })
+

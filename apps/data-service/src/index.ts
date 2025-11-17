@@ -4,6 +4,7 @@ import { initDatabase } from '@repo/data-ops/database';
 import { QueueMessageSchema } from '@repo/data-ops/zod-schema/queue';
 
 export { DestinationEvaluationWorkflow} from '@/workflows/destination-evalutation-workflow';
+export { EvaluationScheduler} from "@/durable-objects/evaluation-scheduler";
 
 export default class DataService extends WorkerEntrypoint<Env> {
 	constructor(ctx: ExecutionContext, env: Env) {
