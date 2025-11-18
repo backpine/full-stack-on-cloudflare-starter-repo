@@ -11,75 +11,150 @@
 	"observability": {
 		"enabled": true,
 	},
-	"browser": {
-		"binding": "VIRTUAL_BROWSER",
-	},
-		"ai": {
-		"binding": "AI",
-	},
-	"r2_buckets": [
-		{
-			"binding": "BUCKET",
-			"bucket_name": "smart-links-eval-stage",
-
-		}
-	],
-	"d1_databases": [
-	    {
-			"binding": "DB",
-			"database_id": "ceca6732-3155-43ad-aa3c-e50279090916",
-			"remote": true
-		  }	
-	],
-	"kv_namespaces": [
-		{
-			"binding": "CACHE",
-			"id": "9938082e883641dd8747a81ead95ba42",
-			"remote": true
-		}
-	],
-	"queues": {
-		"consumers": [
-			{
-				"queue": "smart-links-data-queue-stage",
-			}
-		],
-		"producers": [
-			{
-				"binding": "QUEUE",
-				"queue": "smart-links-data-queue-stage",
-			}
-		]
-	},
-	"workflows": [
-		{
-			"binding": "DESTINATION_EVALUATION_WORKFLOW",
-			"name": "destination-evaluation-workflow",
-			"class_name": "DestinationEvaluationWorkflow"
-		}
-	],
-	"durable_objects": {
-		"bindings": [
-			{
-				"class_name": "LinkClickTracker",
-				"name": "LINK_CLICK_TRACKER_OBJECT"
+	"env": {
+		"stage": {
+			"browser": {
+				"binding": "VIRTUAL_BROWSER",
 			},
-			{
-				"name": "EVALUATION_SCHEDULAR",
-				"class_name": "EvaluationScheduler"
+				"ai": {
+				"binding": "AI",
 			},
-		
-		]
-	},
-	"migrations": [
-		{
-			"tag": "v1",
-			"new_classes": ["EvaluationScheduler"],
+			"r2_buckets": [
+				{
+					"binding": "BUCKET",
+					"bucket_name": "smart-links-eval-stage",
 
+				}
+			],
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_id": "ceca6732-3155-43ad-aa3c-e50279090916",
+					"remote": true
+				}	
+			],
+			"kv_namespaces": [
+				{
+					"binding": "CACHE",
+					"id": "9938082e883641dd8747a81ead95ba42",
+					"remote": true
+				}
+			],
+			"queues": {
+				"consumers": [
+					{
+						"queue": "smart-links-data-queue-stage",
+					}
+				],
+				"producers": [
+					{
+						"binding": "QUEUE",
+						"queue": "smart-links-data-queue-stage",
+					}
+				]
+			},
+			"workflows": [
+				{
+					"binding": "DESTINATION_EVALUATION_WORKFLOW",
+					"name": "destination-evaluation-workflow",
+					"class_name": "DestinationEvaluationWorkflow"
+				}
+			],
+			"durable_objects": {
+				"bindings": [
+					{
+						"class_name": "LinkClickTracker",
+						"name": "LINK_CLICK_TRACKER_OBJECT"
+					},
+					{
+						"name": "EVALUATION_SCHEDULAR",
+						"class_name": "EvaluationScheduler"
+					},
+				
+				]
+			},
+			"migrations": [
+				{
+					"tag": "v1",
+					"new_classes": ["EvaluationScheduler"],
+
+				},
+				{
+					"tag": "v2",
+					"new_sqlite_classes": ["LinkClickTracker"]
+				},
+			],
 		},
-		{
-			"tag": "v2",
-			"new_sqlite_classes": ["LinkClickTracker"]
-		},
-	],
+		"production": {
+			"browser": {
+				"binding": "VIRTUAL_BROWSER",
+			},
+				"ai": {
+				"binding": "AI",
+			},
+			"r2_buckets": [
+				{
+					"binding": "BUCKET",
+					"bucket_name": "smart-links-eval-production",
+
+				}
+			],
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_id": "04915eb2-8f27-41d4-9b9d-a2ef14975eef",
+				}	
+			],
+			"kv_namespaces": [
+				{
+					"binding": "CACHE",
+					"id": "402beb801bd54f389ef86b16740518cc",
+				}
+			],
+			"queues": {
+				"consumers": [
+					{
+						"queue": "smart-links-data-queue-production",
+					}
+				],
+				"producers": [
+					{
+						"binding": "QUEUE",
+						"queue": "smart-links-data-queue-production",
+					}
+				]
+			},
+			"workflows": [
+				{
+					"binding": "DESTINATION_EVALUATION_WORKFLOW",
+					"name": "destination-evaluation-workflow-production",
+					"class_name": "DestinationEvaluationWorkflow"
+				}
+			],
+			"durable_objects": {
+				"bindings": [
+					{
+						"class_name": "LinkClickTracker",
+						"name": "LINK_CLICK_TRACKER_OBJECT"
+					},
+					{
+						"name": "EVALUATION_SCHEDULAR",
+						"class_name": "EvaluationScheduler"
+					},
+				
+				]
+			},
+			"migrations": [
+				{
+					"tag": "v1",
+					"new_classes": ["EvaluationScheduler"],
+
+				},
+				{
+					"tag": "v2",
+					"new_sqlite_classes": ["LinkClickTracker"]
+				},
+			],
+		}
+	}
 }
