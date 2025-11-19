@@ -36,7 +36,7 @@ export const Route = createFileRoute("/app/_authed/links")({
 });
 
 function RouteComponent() {
-  const { data: links } = useSuspenseQuery(
+  const { data: links, } = useSuspenseQuery(
     trpc.links.linkList.queryOptions({}),
   );
   const nav = useNavigate();

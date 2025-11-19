@@ -17,4 +17,6 @@ export async function createContext({
   };
 }
 
+
 export type Context = Awaited<ReturnType<typeof createContext>>;
+// runs in every request to create the context object

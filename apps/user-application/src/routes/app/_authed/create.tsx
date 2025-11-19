@@ -107,11 +107,19 @@ function RouteComponent() {
                     },
                   });
                 }}
-                disabled={!name || !url || !isValidUrl(url)}
+                disabled={!name || !url || !isValidUrl(url) || createMutation.isPending}
                 className="w-full h-12 text-base shadow-lg hover:shadow-xl transition-all duration-200"
               >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Create Link
+              {
+                createMutation.isPending ? (
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 animate-spin" />
+                    Creating...
+                  </div>
+                ) : (
+                  "Create Link"
+                )
+              }
               </Button>
             </div>
           </CardContent>

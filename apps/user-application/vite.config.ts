@@ -18,7 +18,14 @@ export default defineConfig({
     tanstackRouter({ autoCodeSplitting: true }),
     viteReact(),
     tailwindcss(),
-    cloudflare(),
+    cloudflare(
+      {
+        experimental:{
+          remoteBindings:true
+        }
+      }
+      
+    ), // Cloudflare Workers adapter
   ],
   server: {
     watch: {
