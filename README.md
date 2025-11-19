@@ -1,3 +1,3 @@
 # cf-services-the-course-playground
 lol
-fuck vercel 
+fuck vercel  for supporting genocide
