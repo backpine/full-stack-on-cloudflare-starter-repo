@@ -11,4 +11,170 @@
 	"observability": {
 		"enabled": true,
 	},
+	"env": {
+		"stage":{
+			 "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "71d526c9-fbb0-45ea-b739-627e06a7795f",
+      "remote": true
+      
+    }
+  ],
+  "kv_namespaces": [
+{
+	"binding": "CACHE",
+
+	"remote": true,
+	"id": "ff85116187304b028f0e038e0bde2903",
+	
+}
+  ],
+  "queues": {
+	"consumers": [
+		{
+			"queue": "smart-links-data-queue-stage",
+			"dead_letter_queue": "smart-link-data-dead-letter-stage"
+
+		},
+		{
+			"queue": "smart-links-data-queue-stage",
+			"retry_delay": 0
+		} // Default consumer for other messages
+	],
+	"producers": [
+		{
+			"binding": "QUEUE",
+			"queue": "smart-links-data-queue-stage"
+		}
+	]
+
+  },
+  "workflows": [
+	{
+		"binding": "DESTINATION_EVALUATION_WORKFLOW",
+		"name": "destination-evaluation-workflow",
+		"class_name": "DestinationEvaluationWorkflow"
+
+
+	}
+  ],
+  "browser": {
+	"binding": "VIRTUAL_BROWSER"
+  },
+  "ai": {
+		"binding": "AI",
+	},
+	"r2_buckets": [
+		{ "binding": "BUCKET","bucket_name": "smart-links-eval-stage"}
+	],
+
+		"durable_objects": {
+		"bindings": [
+			{
+				"name": "EVALUATION_SCHEDULAR",
+				"class_name": "EvaluationScheduler"
+			},
+			{
+				"class_name": "LinkClickTracker",
+				"name": "LINK_CLICK_TRACKER_OBJECT"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_classes": ["EvaluationScheduler"]
+		},
+		{
+			"tag": "v2",
+			"new_sqlite_classes": ["LinkClickTracker"]
+		}
+	]
+
+		},
+		"production":{
+			 "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "bbac216a-1f82-48f6-8a20-44fa0c677822",
+    
+      
+    }
+  ],
+  "kv_namespaces": [
+{
+	"binding": "CACHE",
+
+	
+	"id": "57b43f46120f43a987cbeda0d8edd686",
+	
+}
+  ],
+  "queues": {
+	"consumers": [
+		{
+			"queue": "smart-links-data-queue-production",
+			"dead_letter_queue": "smart-link-data-dead-letter-production"
+
+		},
+		{
+			"queue": "smart-link-data-dead-letter-production",
+			"retry_delay": 0
+		} // Default consumer for other messages
+	],
+	"producers": [
+		{
+			"binding": "QUEUE",
+			"queue": "smart-links-data-queue-production"
+		}
+	]
+
+  },
+  "workflows": [
+	{
+		"binding": "DESTINATION_EVALUATION_WORKFLOW",
+		"name": "destination-evaluation-workflow-production",
+		"class_name": "DestinationEvaluationWorkflow"
+
+
+	}
+  ],
+  "browser": {
+	"binding": "VIRTUAL_BROWSER"
+  },
+  "ai": {
+		"binding": "AI",
+	},
+	"r2_buckets": [
+		{ "binding": "BUCKET",
+		"bucket_name": "smart-links-eval-production"}
+	],
+
+		"durable_objects": {
+		"bindings": [
+			{
+				"name": "EVALUATION_SCHEDULAR",
+				"class_name": "EvaluationScheduler"
+			},
+			{
+				"class_name": "LinkClickTracker",
+				"name": "LINK_CLICK_TRACKER_OBJECT"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_classes": ["EvaluationScheduler"]
+		},
+		{
+			"tag": "v2",
+			"new_sqlite_classes": ["LinkClickTracker"]
+		}
+	]
+
+		},
+	}
+	
 }

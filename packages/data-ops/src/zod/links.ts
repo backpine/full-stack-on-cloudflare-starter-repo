@@ -13,7 +13,7 @@ export const destinationsSchema = z.preprocess(
       default: z.string().url(),
     })
     .catchall(z.string().url()),
-);
+); // at least a default destination is required
 
 export type DestinationsSchemaType = z.infer<typeof destinationsSchema>;
 
@@ -30,7 +30,8 @@ export const createLinkSchema = linkSchema.omit({
   updated: true,
   accountId: true,
   linkId: true,
-});
+}); // only need name and destinations to create a link
+
 
 export const cloudflareInfoSchema = z.object({
   country: z.string().optional(),

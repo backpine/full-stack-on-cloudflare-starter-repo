@@ -14,4 +14,49 @@
   "observability": {
     "enabled": true,
   },
+  "env": {
+   
+    "stage":{
+      
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "71d526c9-fbb0-45ea-b739-627e06a7795f",
+      "remote": true
+      
+    }
+  ],
+  "services": [
+    {
+    "binding": "BACKEND_SERVICE", // name of the binding in your worker
+    "service": "data-service-stage",
+    "remote": true
+
+
+  }
+
+  ]
+    },
+     "production":{
+      
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "bbac216a-1f82-48f6-8a20-44fa0c677822",
+      "remote": true
+      
+    }
+  ],
+  "services": [
+    {
+    "binding": "BACKEND_SERVICE", // name of the binding in your worker
+    "service": "data-service-production",
+    "remote": true
+
+
+  }
+
+  ]
+    },
+  }
 }

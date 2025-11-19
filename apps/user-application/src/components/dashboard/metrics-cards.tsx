@@ -45,17 +45,17 @@ export function MetricsCards() {
   const { data: clicksLastHour } = useSuspenseQuery(
     trpc.links.totalLinkClickLastHour.queryOptions(undefined, {
       refetchInterval: 5000,
-    }),
+    }), // refetch every 5 seconds
   );
   const { data: clicksLast24Hours } = useSuspenseQuery(
     trpc.links.last24HourClicks.queryOptions(undefined, {
       refetchInterval: 5000,
-    }),
+    }), // refetch every 5 seconds
   );
   const { data: clicksLast30Days } = useSuspenseQuery(
     trpc.links.last30DaysClicks.queryOptions(undefined, {
       refetchInterval: 5000,
-    }),
+    }), // refetch every 5 seconds
   );
 
   return (

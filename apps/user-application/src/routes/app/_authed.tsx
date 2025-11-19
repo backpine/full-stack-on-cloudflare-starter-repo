@@ -32,3 +32,4 @@ function RouteComponent() {
     </div>
   );
 }
+ // this is the layout for authenticated app routes with sidebar and header

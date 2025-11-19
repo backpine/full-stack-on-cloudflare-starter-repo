@@ -24,5 +24,5 @@ export const QueueMessageSchema = z.discriminatedUnion("type", [
   LinkClickMessageSchema,
 ]);
 
-export type LinkClickMessageType = z.infer<typeof LinkClickMessageSchema>;
-export type QueueMessageType = z.infer<typeof QueueMessageSchema>;
+export type LinkClickMessageType = z.infer<typeof LinkClickMessageSchema>; // Specific message type
+export type QueueMessageType = z.infer<typeof QueueMessageSchema>; // Union of all message types

@@ -80,3 +80,4 @@ function RouteComponent() {
     </div>
   );
 }
+ // this is the home page for authenticated users showing dashboard metrics

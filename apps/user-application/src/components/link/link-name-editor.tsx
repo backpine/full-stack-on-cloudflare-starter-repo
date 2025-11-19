@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Link, Edit3, Check, Eye } from "lucide-react";
 import { queryClient, trpc } from "@/router";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+
 
 interface LinkNameEditorProps {
   linkId: string;
@@ -21,7 +23,9 @@ export function LinkNameEditor({ linkId, initialName }: LinkNameEditorProps) {
       onSettled: () => {
         queryClient.invalidateQueries({
           queryKey: trpc.links.linkList.queryKey(),
-        });
+          
+        }); // Invalidate link list to reflect name change
+        toast.success("Link name updated successfully");
       },
     }),
   );
