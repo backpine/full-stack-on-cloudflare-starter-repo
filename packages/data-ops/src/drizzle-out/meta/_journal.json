@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1762965888961,
+      "tag": "0000_vengeful_swordsman",
+      "breakpoints": true
+    }
+  ]
+}
