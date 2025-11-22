@@ -12,7 +12,9 @@ This template provides a fully integrated setup of TanStack React Router, tRPC, 
 - [TypeScript](https://www.typescriptlang.org/) for type safety
 
 ## Getting Started
+  
 
+  
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18 or later)
