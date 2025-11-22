@@ -43,5 +43,5 @@
 		}
 	},
 	"exclude": ["test"],
-	"include": ["worker-configuration.d.ts", "service-bindings.d.ts", "src/**/*.ts"]
+	"include": ["worker-configuration.d.ts", "service-bindings.d.ts", "src/**/*.ts", "vitest.config.mts"]
 }
