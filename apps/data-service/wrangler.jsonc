@@ -9,6 +9,130 @@
 	"compatibility_date": "2025-06-17",
 	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
-		"enabled": true,
+		"enabled": true
 	},
+	"env": {
+		"stage": {
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_id": "9235b24c-67f8-4070-a7b8-4ae046ace9f5",
+					"remote": true
+				}
+			],
+			"kv_namespaces": [
+				{
+					"binding": "CACHE",
+					"id": "2a361933f5f04f7fb1f4e7204e6f289f",
+					"remote": true
+				}
+			],
+			"queues": {
+				"consumers": [
+					{
+						"queue": "smart-links-data-queue-stage"
+					}
+				],
+				"producers": [
+					{
+						"binding": "QUEUE",
+						"queue": "smart-links-data-queue-stage"
+					}
+				]
+			},
+			"workflows": [
+				{
+					"binding": "DESTINATION_EVALUATION_WORKFLOW",
+					"name": "destination-evaluation-workflow",
+					"class_name": "DestinationEvaluationWorkflow"
+				}
+			],
+			"browser": {
+				"binding": "VIRTUAL_BROWSER"
+			},
+			"ai": {
+				"binding": "AI"
+			},
+			"r2_buckets": [
+				{
+					"binding": "BUCKET",
+					"bucket_name": "smart-links-eval-stage"
+				}
+			],
+			"durable_objects": {
+				"bindings": [
+					{
+						"name": "EVALUATION_SCHEDULER",
+						"class_name": "EvaluationScheduler"
+					}
+				]
+			},
+			"migrations": [
+				{
+					"tag": "v1",
+					"new_classes": ["EvaluationScheduler"]
+				}
+			]
+		},
+		"production": {
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_id": "9765d698-191c-47de-b02f-6d21989154a8"
+				}
+			],
+			"kv_namespaces": [
+				{
+					"binding": "CACHE",
+					"id": "2242ddeead384521a80321bc83a71456"
+				}
+			],
+			"queues": {
+				"consumers": [
+					{
+						"queue": "smart-links-data-queue-production"
+					}
+				],
+				"producers": [
+					{
+						"binding": "QUEUE",
+						"queue": "smart-links-data-queue-production"
+					}
+				]
+			},
+			"workflows": [
+				{
+					"binding": "DESTINATION_EVALUATION_WORKFLOW",
+					"name": "destination-evaluation-workflow-production",
+					"class_name": "DestinationEvaluationWorkflow"
+				}
+			],
+			"browser": {
+				"binding": "VIRTUAL_BROWSER"
+			},
+			"ai": {
+				"binding": "AI"
+			},
+			"r2_buckets": [
+				{
+					"binding": "BUCKET",
+					"bucket_name": "smart-links-eval-production"
+				}
+			],
+			"durable_objects": {
+				"bindings": [
+					{
+						"name": "EVALUATION_SCHEDULER",
+						"class_name": "EvaluationScheduler"
+					}
+				]
+			},
+			"migrations": [
+				{
+					"tag": "v1",
+					"new_classes": ["EvaluationScheduler"]
+				}
+			]
+		}
+	}
 }

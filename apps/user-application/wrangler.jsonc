@@ -14,4 +14,23 @@
   "observability": {
     "enabled": true,
   },
+  "env": {
+    "stage": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_id": "9235b24c-67f8-4070-a7b8-4ae046ace9f5",
+          "remote": true
+        }
+      ]
+    },
+    "production": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_id": "9765d698-191c-47de-b02f-6d21989154a8"
+        }
+      ]
+    }
+  },
 }
