@@ -7,11 +7,9 @@
 	"name": "data-service",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-06-17",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
+	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
-		"enabled": true,
+		"enabled": true
 	},
 	"browser": {
 		"binding": "VIRTUAL_BROWSER"
@@ -19,6 +17,7 @@
 	"ai": {
 		"binding": "AI"
 	},
+	"r2_buckets": [{ "binding": "BUCKET", "bucket_name": "smart-links-eval-stage" }],
 	"d1_databases": [
 		{
 			"binding": "DB",
@@ -40,7 +39,7 @@
 				"dead_letter_queue": "smart-links-data-dead-letter-stage"
 			},
 			{
-				"queue": "smart-links-data-dead-letter-stage",
+				"queue": "smart-links-data-dead-letter-stage"
 			}
 		],
 		"producers": [
