@@ -1,4 +1,4 @@
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGeoClickStore } from "./geo-clicks-store";
 import { durableObjectGeoClickArraySchema } from "@repo/data-ops/zod-schema/links";
 
@@ -15,7 +15,9 @@ export function useClickSocket() {
   useEffect(() => {
     const connect = () => {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-      const socket = new WebSocket(`${protocol}//localhost:8787/click-socket`);
+      const socket = new WebSocket(
+        `${protocol}//${import.meta.env.VITE_BASE_HOST}/click-socket`
+      );
 
       socket.onopen = () => {
         setIsConnected(true);
@@ -31,7 +33,7 @@ export function useClickSocket() {
         addClicks(data);
       };
 
-      socket.onerror = (event) => {
+      socket.onerror = (_event) => {
         // Error handling if needed
       };
 
