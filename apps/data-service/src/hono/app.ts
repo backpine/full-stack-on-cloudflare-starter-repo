@@ -5,8 +5,15 @@ import { Hono } from 'hono';
 
 export const App = new Hono<{ Bindings: Env }>();
 
-App.get('/link-click/:accountId', async (c) => {
-	const accountId = c.req.param('accountId');
+App.get('/click-socket', async (c) => {
+	const updateHeader = c.req.header('Upgrade');
+	if (!updateHeader || updateHeader !== 'websocket') {
+		return c.text('Expected Upgrade: websocket', 426);
+	}
+
+	// const accountId = c.req.header('account-id');
+	const accountId = '1234567890';
+	if (!accountId) return c.text('No Headers', 404);
 	const doId = c.env.LINK_CLICK_TRACKER_OBJECT.idFromName(accountId);
 	const stub = c.env.LINK_CLICK_TRACKER_OBJECT.get(doId);
 	return await stub.fetch(c.req.raw);
