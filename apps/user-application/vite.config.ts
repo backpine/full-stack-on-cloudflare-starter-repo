@@ -1,4 +1,8 @@
 import { defineConfig } from "vite";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import viteReact from "@vitejs/plugin-react";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
@@ -9,6 +13,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   resolve: {
     alias: {
+      "@/worker": path.resolve(__dirname, "./worker"),
       // /esm/icons/index.mjs only exports the icons statically, so no separate chunks are created
       "@tabler/icons-react": "@tabler/icons-react/dist/esm/icons/index.mjs",
     },
