@@ -27,7 +27,23 @@ export const Route = createFileRoute("/app/_authed/link/$id")({
       }),
     );
   },
+  pendingComponent: RouteLoading,
 });
+
+function RouteLoading() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted to-muted/50 p-6">
+      <div className="w-full space-y-8">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Link Dashboard</h1>
+          <p className="text-muted-foreground mt-2">
+            Loading link information...
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function RouteComponent() {
   const { id } = Route.useParams();
@@ -42,22 +58,7 @@ function RouteComponent() {
     linkInfo ? Object.keys(linkInfo.destinations).length > 1 : false,
   );
 
-  if (!linkInfo) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-muted to-muted/50 p-6">
-        <div className="w-full space-y-8">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">
-              Link Dashboard
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Loading link information...
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="min-h-screen  via-muted to-muted/50 p-6">

@@ -3,11 +3,13 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"deploy": "wrangler deploy",
-		"dev": "wrangler dev",
+
+		"stage:deploy": "wrangler deploy --env stage",
+		"production:deploy": "wrangler deploy --env production",
+		"dev": "wrangler dev --remote",
 		"start": "wrangler dev",
 		"test": "vitest",
-		"cf-typegen": "wrangler types --env-interface BaseEnv"
+		"cf-typegen": "wrangler types --env-interface BaseEnv --env stage"
 	},
 	"devDependencies": {
 		"@cloudflare/puppeteer": "^1.0.3",
