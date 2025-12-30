@@ -1,5 +1,5 @@
 import { initDatabase } from "@repo/data-ops/database";
-import { App } from "./hono/app.ts";
+import { App } from "@/worker/hono/app";
 
 export default {
   fetch(request, env, ctx) {
