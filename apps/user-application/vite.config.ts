@@ -25,4 +25,7 @@ export default defineConfig({
       ignored: ["**/.wrangler/state/**"],
     },
   },
+  ssr: {
+    noExternal: ["@repo/data-ops"],
+  },
 });
