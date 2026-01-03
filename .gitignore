@@ -84,3 +84,5 @@ temp/
 
 # Editor directories and files
 .vscode/
+
+.idea
