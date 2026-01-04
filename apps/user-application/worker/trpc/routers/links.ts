@@ -4,7 +4,7 @@ import {
   createLinkSchema,
   destinationsSchema,
 } from "@repo/data-ops/zod-schema/links";
-import { createLink, getLinks, getLink } from "@repo/data-ops/queries/links";
+import { createLink, getLinks, getLink, updateLinkName, updateLinkDestinations } from "@repo/data-ops/queries/links";
 
 import { TRPCError } from "@trpc/server";
 import {
@@ -31,16 +31,17 @@ export const linksTrpcRoutes = t.router({
       });
     return id;
   }),
-  updateLinkName: t.procedure
-    .input(
-      z.object({
-        linkId: z.string(),
-        name: z.string().min(1).max(300),
-      }),
-    )
-    .mutation(async ({ input }) => {
-      console.log(input.linkId, input.name);
-    }),
+    updateLinkName: t.procedure
+        .input(
+            z.object({
+                linkId: z.string(),
+                name: z.string().min(1).max(300),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            console.log(input.linkId, input.name);
+            await updateLinkName(input.linkId, input.name)
+        }),
   getLink: t.procedure
     .input(
       z.object({
@@ -52,17 +53,17 @@ export const linksTrpcRoutes = t.router({
       if (!data) throw new TRPCError({ code: "NOT_FOUND" });
       return data;
     }),
-  updateLinkDestinations: t.procedure
-    .input(
-      z.object({
-        linkId: z.string(),
-        destinations: destinationsSchema,
-      }),
-    )
-    .mutation(async ({ input }) => {
-      console.log(input.linkId, input.destinations);
-    }),
-  activeLinks: t.procedure.query(async () => {
+    updateLinkDestinations: t.procedure
+        .input(
+            z.object({
+                linkId: z.string(),
+                destinations: destinationsSchema,
+            }),
+        )
+        .mutation(async ({ input }) => {
+            await updateLinkDestinations(input.linkId, input.destinations)
+        }),
+    activeLinks: t.procedure.query(async () => {
     return ACTIVE_LINKS_LAST_HOUR;
   }),
   totalLinkClickLastHour: t.procedure.query(async () => {
