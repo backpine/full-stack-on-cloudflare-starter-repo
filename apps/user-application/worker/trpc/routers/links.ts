@@ -4,13 +4,12 @@ import {
   createLinkSchema,
   destinationsSchema,
 } from "@repo/data-ops/zod-schema/links";
-import { createLink } from "@repo/data-ops/queries/links";
+import { createLink, getLinks, getLink } from "@repo/data-ops/queries/links";
 
 import { TRPCError } from "@trpc/server";
 import {
   ACTIVE_LINKS_LAST_HOUR,
   LAST_30_DAYS_BY_COUNTRY,
-  LINK_LIST,
 } from "./dummy-data";
 
 export const linksTrpcRoutes = t.router({
@@ -20,8 +19,9 @@ export const linksTrpcRoutes = t.router({
         offset: z.number().optional(),
       }),
     )
-    .query(async ({}) => {
-      return LINK_LIST;
+    .query(async ({ctx, input}) => {
+        // offset is the datetime for pagination
+      return await getLinks(ctx.userInfo.userId, input.offset?.toString())
     }),
     // TRPC will provide, input, data, ctz
   createLink: t.procedure.input(createLinkSchema).mutation(async ({input, ctx}) => {
@@ -47,19 +47,8 @@ export const linksTrpcRoutes = t.router({
         linkId: z.string(),
       }),
     )
-    .query(async ({}) => {
-      const data = {
-        name: "My Sample Link",
-        linkId: "link_123456789",
-        accountId: "user_987654321",
-        destinations: {
-          default: "https://example.com",
-          mobile: "https://mobile.example.com",
-          desktop: "https://desktop.example.com",
-        },
-        created: "2024-01-15T10:30:00Z",
-        updated: "2024-01-20T14:45:00Z",
-      };
+    .query(async ({input}) => {
+      const data = await getLink(input.linkId);
       if (!data) throw new TRPCError({ code: "NOT_FOUND" });
       return data;
     }),
