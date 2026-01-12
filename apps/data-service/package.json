@@ -3,9 +3,9 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"deploy": "wrangler deploy",
-		"dev": "wrangler dev",
-		"start": "wrangler dev",
+		"deploy": "pnpm --filter @repo/data-ops run build && wrangler deploy",
+		"dev": "pnpm --filter @repo/data-ops run build && wrangler dev",
+		"start": "pnpm --filter @repo/data-ops run build && wrangler dev",
 		"test": "vitest",
 		"cf-typegen": "wrangler types --env-interface BaseEnv"
 	},
