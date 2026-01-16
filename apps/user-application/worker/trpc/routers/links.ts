@@ -4,12 +4,19 @@ import {
   createLinkSchema,
   destinationsSchema,
 } from "@repo/data-ops/zod-schema/links";
+import {
+  createLink,
+  getLinks,
+  getLink,
+  updateLinkDestinations,
+  updateLinkName,
+  deleteLink,
+} from "@repo/data-ops/queries/links";
 
 import { TRPCError } from "@trpc/server";
 import {
   ACTIVE_LINKS_LAST_HOUR,
   LAST_30_DAYS_BY_COUNTRY,
-  LINK_LIST,
 } from "./dummy-data";
 
 export const linksTrpcRoutes = t.router({
@@ -19,12 +26,32 @@ export const linksTrpcRoutes = t.router({
         offset: z.number().optional(),
       }),
     )
-    .query(async ({}) => {
-      return LINK_LIST;
+    .query(async ({ ctx, input }) => {
+      const links = await getLinks({
+        accountId: ctx.userInfo.accountId,
+        offset: input.offset,
+        limit: 25,
+      });
+
+      // Transform to expected format
+      return links.map((link) => ({
+        linkId: link.linkId,
+        name: link.name,
+        destinations: link.destinations,
+        created: link.createdAt.toISOString(),
+      }));
     }),
-  createLink: t.procedure.input(createLinkSchema).mutation(async ({}) => {
-    return "random-id";
+
+  createLink: t.procedure.input(createLinkSchema).mutation(async ({ ctx, input }) => {
+    const link = await createLink({
+      accountId: ctx.userInfo.accountId,
+      name: input.name,
+      destinations: input.destinations,
+    });
+
+    return link.linkId;
   }),
+
   updateLinkName: t.procedure
     .input(
       z.object({
@@ -32,31 +59,46 @@ export const linksTrpcRoutes = t.router({
         name: z.string().min(1).max(300),
       }),
     )
-    .mutation(async ({ input }) => {
-      console.log(input.linkId, input.name);
+    .mutation(async ({ ctx, input }) => {
+      const result = await updateLinkName({
+        linkId: input.linkId,
+        accountId: ctx.userInfo.accountId,
+        name: input.name,
+      });
+
+      if (!result) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Link not found" });
+      }
+
+      return { success: true };
     }),
+
   getLink: t.procedure
     .input(
       z.object({
         linkId: z.string(),
       }),
     )
-    .query(async ({}) => {
-      const data = {
-        name: "My Sample Link",
-        linkId: "link_123456789",
-        accountId: "user_987654321",
-        destinations: {
-          default: "https://example.com",
-          mobile: "https://mobile.example.com",
-          desktop: "https://desktop.example.com",
-        },
-        created: "2024-01-15T10:30:00Z",
-        updated: "2024-01-20T14:45:00Z",
+    .query(async ({ ctx, input }) => {
+      const link = await getLink({
+        linkId: input.linkId,
+        accountId: ctx.userInfo.accountId,
+      });
+
+      if (!link) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Link not found" });
+      }
+
+      return {
+        name: link.name,
+        linkId: link.linkId,
+        accountId: link.accountId,
+        destinations: link.destinations,
+        created: link.createdAt.toISOString(),
+        updated: link.updatedAt.toISOString(),
       };
-      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
-      return data;
     }),
+
   updateLinkDestinations: t.procedure
     .input(
       z.object({
@@ -64,15 +106,48 @@ export const linksTrpcRoutes = t.router({
         destinations: destinationsSchema,
       }),
     )
-    .mutation(async ({ input }) => {
-      console.log(input.linkId, input.destinations);
+    .mutation(async ({ ctx, input }) => {
+      const result = await updateLinkDestinations({
+        linkId: input.linkId,
+        accountId: ctx.userInfo.accountId,
+        destinations: input.destinations,
+      });
+
+      if (!result) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Link not found" });
+      }
+
+      return { success: true };
     }),
+
+  deleteLink: t.procedure
+    .input(
+      z.object({
+        linkId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const success = await deleteLink({
+        linkId: input.linkId,
+        accountId: ctx.userInfo.accountId,
+      });
+
+      if (!success) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Link not found" });
+      }
+
+      return { success: true };
+    }),
+
+  // Analytics endpoints (keeping dummy data for now)
   activeLinks: t.procedure.query(async () => {
     return ACTIVE_LINKS_LAST_HOUR;
   }),
+
   totalLinkClickLastHour: t.procedure.query(async () => {
     return 13;
   }),
+
   last24HourClicks: t.procedure.query(async () => {
     return {
       last24Hours: 56,
@@ -80,9 +155,11 @@ export const linksTrpcRoutes = t.router({
       percentChange: 12,
     };
   }),
+
   last30DaysClicks: t.procedure.query(async () => {
     return 78;
   }),
+
   clicksByCountry: t.procedure.query(async () => {
     return LAST_30_DAYS_BY_COUNTRY;
   }),

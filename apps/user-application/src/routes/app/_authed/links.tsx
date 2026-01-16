@@ -79,7 +79,13 @@ function RouteComponent() {
 
     columnHelper.accessor("destinations", {
       header: "Destination Links",
-      cell: (info) => info.getValue(),
+      cell: (info) => {
+        const destinations = info.getValue();
+        if (typeof destinations === "object" && destinations !== null) {
+          return Object.keys(destinations).length;
+        }
+        return destinations;
+      },
     }),
   ];
 

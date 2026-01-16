@@ -1,1 +1,3 @@
-interface ServiceBindings extends Env {}
+interface ServiceBindings extends Env {
+  DB: D1Database;
+}
