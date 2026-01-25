@@ -1,4 +1,5 @@
 .env
+!.env.example
 .dist
 better-auth_migrations
 node_modules
