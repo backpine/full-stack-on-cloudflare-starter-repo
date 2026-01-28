@@ -1,7 +1,8 @@
-import { WorkerEntrypoint } from 'cloudflare:workers';
+import { WorkerEntrypoint } from "cloudflare:workers";
+import { App } from "./hono/app";
 
 export default class DataService extends WorkerEntrypoint<Env> {
 	fetch(request: Request) {
-		return new Response('Hello World!');
+		return App.fetch(request, this.env, this.ctx);
 	}
 }
