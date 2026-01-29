@@ -9,6 +9,13 @@ App.get("/hello-world", async (c) => {
 	})
 });
 
+App.get('/:id', async (c) => {
+	const id = c.req.param('id');
+	const linkInfoFromDb = await getLink(id)
+	console.log(linkInfoFromDb)
+	return c.json({...linkInfoFromDb})
+})
+
 // -----------
 // we are starting over with a more simple solution
 // /**
@@ -43,10 +50,3 @@ App.get("/hello-world", async (c) => {
 // });
 //
 
-
-App.get('/:id', async (c) => {
-	const id = c.req.param('id');
-	const linkInfoFromDb = await getLink(id)
-	console.log(linkInfoFromDb)
-	return c.json({...linkInfoFromDb})
-})
