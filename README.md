@@ -10,3 +10,8 @@ There are two different services.
 
 ## Packages
 ### data-ops
+
+
+## Deployment
+We want to continuously deploy. 
+Refer to `apps/user-application/README.md`
