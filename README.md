@@ -13,10 +13,13 @@ There are two different services.
 
 ## Packages
 ### data-ops
-`data-service` will do all of the data operations
+`data-ops` is shared and must be built before it gets used. 
 
+## Apps
 ### user-application
 user-application is the ui
+### data-service
+`data-service` will do all of the data operations
 
 ## Deployment
 We want to continuously deploy. 
