@@ -6,7 +6,8 @@
     "build-package": "pnpm --filter @repo/data-ops run build",
     "dev-frontend": "pnpm --filter user-application run dev",
     "dev-data-service": "pnpm --filter data-service run dev",
-    "dev": "concurrently \"pnpm run dev-frontend\" \"pnpm run dev-data-service\""
+    "dev": "concurrently \"pnpm run dev-frontend\" \"pnpm run dev-data-service\"",
+    "deploy:all": "pnpm run build-package && pnpm --filter data-service --filter user-application run deploy"
   },
   "keywords": [],
   "author": "",
