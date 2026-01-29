@@ -1,7 +1,9 @@
 # cf-services-the-course-playground
 
-[Course](https://learn.backpine.com/full-stack-on-cloudflare/687af278-494d-4375-977f-cb4303da1c48)
-[repo](https://github.com/backpine/full-stack-on-cloudflare-starter-repo)
+[Course videos](https://learn.backpine.com/full-stack-on-cloudflare/687af278-494d-4375-977f-cb4303da1c48)
+[Course repo](https://github.com/backpine/full-stack-on-cloudflare-starter-repo)
+[My repo](https://github.com/sanchezg7/full-stack-on-cloudflare-starter-repo)
+
 
 Mono repo setup.
 Multiple apps packaged in a single repo
@@ -18,4 +20,4 @@ user-application is the ui
 
 ## Deployment
 We want to continuously deploy. 
-Refer to `apps/user-application/README.md`
+Refer to `apps/user-application/README.md` for how to deploy it. 
