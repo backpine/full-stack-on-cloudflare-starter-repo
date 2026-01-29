@@ -1,0 +1,11 @@
+opencollection: 1.0.0
+
+info:
+  name: full-stack-on-cloudflare-starter-repo
+
+request: {}
+bundled: false
+extensions:
+  ignore:
+    - node_modules
+    - .git
