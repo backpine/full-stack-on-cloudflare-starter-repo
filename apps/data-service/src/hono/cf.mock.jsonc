@@ -1,0 +1,67 @@
+{
+	"httpProtocol": "HTTP/1.1",
+	"clientAcceptEncoding": "gzip, compress, deflate, br",
+	"requestPriority": "",
+	"edgeRequestKeepAliveStatus": 1,
+	"requestHeaderNames": {},
+	"clientTcpRtt": 8,
+	"colo": "MIA",
+	"asn": 5650,
+	"asOrganization": "Frontier Communications of America, Inc.",
+	// this will help for routing logic
+	"country": "US",
+	// this could be for gpdr
+	"isEUCountry": false,
+	"city": "Valrico",
+	"continent": "NA",
+	"region": "Florida",
+	"regionCode": "FL",
+	"timezone": "America/New_York",
+	"longitude": "-82.23644",
+	"latitude": "27.93789",
+	"postalCode": "33594",
+	"metroCode": "539",
+	"tlsVersion": "TLSv1.3",
+	"tlsCipher": "AEAD-AES256-GCM-SHA384",
+	"tlsClientRandom": "k83jO0NEW9wOFDEfOASiJI+FjvJsfUtHTp+hwhXi6LU=",
+	"tlsClientCiphersSha1": "kXrN3VEKDdzz2cPKTQaKzpxVTxQ=",
+	"tlsClientExtensionsSha1": "1eY97BUYYO8vDaTfHQywB1pcNdM=",
+	"tlsClientExtensionsSha1Le": "u4wtEMFQBY18l3BzHAvORm+KGRw=",
+	"tlsExportedAuthenticator": {
+		"clientHandshake": "65236939484dda635e01bc3dd1ea17cac282002ce8a92568b3c514753d2856c383e1bd8f27188a9b5bc40e0e33dba743",
+		"serverHandshake": "33d8d040f1a33d2d717227331fb8147255df5323c167bd2d2370c6e1c882c704aeaa434e7b9740736c250a5669d1c881",
+		"clientFinished": "7405a074e72e87b3bd80971529c85d697ac7af8c4645830b224abd46e4d92965874ad641871869b76c67c2f435294f4d",
+		"serverFinished": "8cca60c063dfca3f4a8b302ff92e9b6b0c00992090cc1a554ff01948cb54cc6fe979248c40d260a80ab9470196035b14"
+	},
+	"tlsClientHelloLength": "1605",
+	"tlsClientAuth": {
+		"certPresented": "0",
+		"certVerified": "NONE",
+		"certRevoked": "0",
+		"certIssuerDN": "",
+		"certSubjectDN": "",
+		"certIssuerDNRFC2253": "",
+		"certSubjectDNRFC2253": "",
+		"certIssuerDNLegacy": "",
+		"certSubjectDNLegacy": "",
+		"certSerial": "",
+		"certIssuerSerial": "",
+		"certSKI": "",
+		"certIssuerSKI": "",
+		"certFingerprintSHA1": "",
+		"certFingerprintSHA256": "",
+		"certNotBefore": "",
+		"certNotAfter": ""
+	},
+	"verifiedBotCategory": "",
+	"botManagement": {
+		"corporateProxy": false,
+		"verifiedBot": false,
+		"jsDetection": {
+			"passed": false
+		},
+		"staticResource": false,
+		"detectionIds": {},
+		"score": 99
+	}
+}

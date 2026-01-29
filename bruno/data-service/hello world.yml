@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{api}}/random-id"
+  url: "{{api}}/hello-wor"
   auth: inherit
 
 settings:
