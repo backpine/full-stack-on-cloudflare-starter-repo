@@ -22,6 +22,7 @@
 		"ai": "^6.0.44",
 		"hono": "^4.11.4",
 		"moment": "^2.30.1",
+		"neverthrow": "^8.2.0",
 		"uuid": "^11.1.0",
 		"workers-ai-provider": "^3.0.2",
 		"zod": "^3.25.76"
