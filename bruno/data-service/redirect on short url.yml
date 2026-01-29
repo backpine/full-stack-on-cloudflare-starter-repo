@@ -1,5 +1,5 @@
 info:
-  name: get link details
+  name: redirect on short url
   type: http
   seq: 2
 
