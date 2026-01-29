@@ -4,8 +4,10 @@ import { linkSchema, LinkSchemaType } from "@repo/data-ops/zod-schema/links";
 async function getLinkInfoFromKv(env: Env, id: string) {
 	const linkInfo = await env.CACHE.get(id)
 	if (!linkInfo) {
+		console.log(`No link info found for id: ${id}`);
 		return null;
 	}
+	console.log(`Link info found for id: ${id}`);
 	try {
 		const parsedLinkInfo = JSON.parse(linkInfo);
 		return linkSchema.parse(parsedLinkInfo);
