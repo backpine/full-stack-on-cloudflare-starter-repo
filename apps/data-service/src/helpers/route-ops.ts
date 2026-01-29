@@ -14,13 +14,14 @@ async function getLinkInfoFromKv(env: Env, id: string) {
 	}
 }
 
-const TTL_TIME = 60 * 60 * 24 // 1 day
+const TTL_TIME_ONE_DAY = 60 * 60 * 24 // 1 day
 
 async function saveLinkInfoToKv(env: Env, id: string, linkInfo: LinkSchemaType) {
 	try {
 		await env.CACHE.put(id, JSON.stringify(linkInfo),
 			{
-				expirationTtl: TTL_TIME
+				// automatic cleanup at a later date
+				expirationTtl: TTL_TIME_ONE_DAY
 			}
 		);
 	} catch (error) {
