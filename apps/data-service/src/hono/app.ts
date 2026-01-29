@@ -1,19 +1,31 @@
 import { Hono } from 'hono';
 import {getLink} from "@repo/data-ops/queries/links";
+import { cloudflareInfoSchema } from "@repo/data-ops/zod-schema/links";
+import {getDestinationForCountry} from "@/helpers/route-ops";
 
 export const App = new Hono<{Bindings: Env}>();
 
-App.get("/hello-world", async (c) => {
-	return c.json({
-		message: "Hello world"
-	})
-});
+// App.get("/hello-world", async (c) => {
+// 	return c.json({
+// 		message: "Hello world"
+// 	})
+// });
 
 App.get('/:id', async (c) => {
 	const id = c.req.param('id');
 	const linkInfoFromDb = await getLink(id)
-	console.log(linkInfoFromDb)
-	return c.json({...linkInfoFromDb})
+	if(!linkInfoFromDb){
+		return c.text('Destination not found', 404);
+	}
+	const cfHeader = cloudflareInfoSchema.safeParse(c.req.raw.cf);
+	if(cfHeader.success === false){
+		return c.text('Invalid CF header', 400);
+	}
+
+	const headers = cfHeader.data;
+	const destination = getDestinationForCountry(linkInfoFromDb, headers.country);
+
+	return c.redirect(destination);
 })
 
 // -----------

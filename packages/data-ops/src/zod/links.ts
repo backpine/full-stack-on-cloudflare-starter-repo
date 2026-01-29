@@ -34,6 +34,9 @@ export const createLinkSchema = linkSchema.omit({
   linkId: true,
 });
 
+/**
+ * This comes from the raw request headers
+ */
 export const cloudflareInfoSchema = z.object({
   country: z.string().optional(),
   latitude: z
