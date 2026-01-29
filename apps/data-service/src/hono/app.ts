@@ -27,8 +27,15 @@ App.get("/:id", async (c) => {
 	 */
 	const cfHeaders = c.req.raw.cf;
 	console.log(JSON.stringify(cfHeaders))
+
+	const country = cfHeaders?.country;
+	const lat = cfHeaders?.latitude;
+	const lng = cfHeaders?.longitude;
+
 	return c.json({
-		message: "updatem"
+		country,
+		lat,
+		lng
 	})
 });
 
