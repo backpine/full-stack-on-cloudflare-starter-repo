@@ -1,7 +1,8 @@
-import { WorkerEntrypoint } from 'cloudflare:workers';
-import { App } from "./hono/app";
+import {WorkerEntrypoint} from 'cloudflare:workers';
+import {App} from "./hono/app";
 import {initDatabase} from "@repo/data-ops/database";
 import {QueueMessageSchema} from "packages/data-ops/src/zod/queue";
+import {handleLinkClick} from "@/queue-handlers/link-clicks";
 
 /**
  * This is a worker entry point. It's a class based setup
@@ -11,6 +12,7 @@ export default class DataService extends WorkerEntrypoint<Env> {
 		super(ctx, env);
 		initDatabase(env.DB)
 	}
+
 	fetch(request: Request) {
 		// return new Response('Hello World!');
 
@@ -25,18 +27,18 @@ export default class DataService extends WorkerEntrypoint<Env> {
 	 */
 
 	/**
-	 * This is the handler for the queue
+	 * This is the handler (consumer) for the queue
 	 * @param batch
 	 */
 	async queue(batch: MessageBatch<unknown>) {
 		for (const message of batch.messages) {
 			console.log("Queue Event: ", message.body);
+			// we parse it to ensure it's of a certain type. We only want to handle messages we support
 			const parsedEvent = QueueMessageSchema.safeParse(message.body);
-			if(parsedEvent.success) {
-
+			if (parsedEvent.success) {
 				const event = parsedEvent.data;
 				if (event.type === "LINK_CLICK") {
-
+					await handleLinkClick(this.env, event)
 				}
 			} else {
 				// you could take this to some reporting app like sentry or in your own database
