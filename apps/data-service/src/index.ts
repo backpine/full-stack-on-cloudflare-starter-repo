@@ -1,7 +1,7 @@
 import {WorkerEntrypoint} from 'cloudflare:workers';
 import {App} from "./hono/app";
 import {initDatabase} from "@repo/data-ops/database";
-import {QueueMessageSchema} from "packages/data-ops/src/zod/queue";
+import {QueueMessageSchema} from "@repo/data-ops/zod-schema/queue";
 import {handleLinkClick} from "@/queue-handlers/link-clicks";
 
 /**

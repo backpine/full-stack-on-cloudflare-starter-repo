@@ -29,3 +29,6 @@ Refer to `apps/user-application/README.md` for how to deploy it.
 
 ### Cloudflare KV
 [KV Dashboard - Staging](https://dash.cloudflare.com/dba950c0645b0e21ff1ef9d7465012ac/workers/kv/namespaces/3e3c3f86ef414f8ea08e7144f5697e29/metrics)
+
+### D1
+[D1 Staging](https://dash.cloudflare.com/dba950c0645b0e21ff1ef9d7465012ac/workers/d1/databases/fe1a2999-90ed-456e-9908-ed53ac4bc8bf/metrics)
