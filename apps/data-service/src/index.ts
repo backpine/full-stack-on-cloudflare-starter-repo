@@ -1,6 +1,7 @@
 import { WorkerEntrypoint } from 'cloudflare:workers';
 import { App } from "./hono/app";
 import {initDatabase} from "@repo/data-ops/database";
+import {QueueMessageSchema} from "packages/data-ops/src/zod/queue";
 
 /**
  * This is a worker entry point. It's a class based setup
@@ -30,6 +31,17 @@ export default class DataService extends WorkerEntrypoint<Env> {
 	async queue(batch: MessageBatch<unknown>) {
 		for (const message of batch.messages) {
 			console.log("Queue Event: ", message.body);
+			const parsedEvent = QueueMessageSchema.safeParse(message.body);
+			if(parsedEvent.success) {
+
+				const event = parsedEvent.data;
+				if (event.type === "LINK_CLICK") {
+
+				}
+			} else {
+				// you could take this to some reporting app like sentry or in your own database
+				console.error(parsedEvent.error)
+			}
 
 			// you can manually ack the message
 			// message.ack()
