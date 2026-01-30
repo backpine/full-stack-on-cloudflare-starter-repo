@@ -30,6 +30,13 @@
 			{
 				"queue": "smart-links-data-queue-stage"
 			}
+		],
+		"producers": [
+			{
+				// this is how we access it in the code
+				"binding": "QUEUE",
+				"queue": "smart-links-data-queue-stage"
+			}
 		]
 	}
 }

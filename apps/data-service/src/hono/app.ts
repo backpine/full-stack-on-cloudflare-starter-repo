@@ -11,6 +11,11 @@ export const App = new Hono<{Bindings: Env}>();
 // 	})
 // });
 
+/**
+ * We redirect the user AND kick off a fire and forget event on the queue so that this redirect is fast as possible
+ * We ensure the change is still tracked but we decouple the speed to process that from the actual redirect.
+ * This is the magic of queues
+ */
 App.get('/:id', async (c) => {
 	const id = c.req.param('id');
 	const link = await getRoutingDestinations(c.env, id)
