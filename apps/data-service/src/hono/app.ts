@@ -1,15 +1,9 @@
 import { Hono } from 'hono';
-import {getLink} from "@repo/data-ops/queries/links";
 import { cloudflareInfoSchema } from "@repo/data-ops/zod-schema/links";
 import {getDestinationForCountry, getRoutingDestinations} from "@/helpers/route-ops";
+import { LinkClickMessageType } from "@repo/data-ops/zod-schema/queue";
 
 export const App = new Hono<{Bindings: Env}>();
-
-// App.get("/hello-world", async (c) => {
-// 	return c.json({
-// 		message: "Hello world"
-// 	})
-// });
 
 /**
  * We redirect the user AND kick off a fire and forget event on the queue so that this redirect is fast as possible
@@ -29,6 +23,30 @@ App.get('/:id', async (c) => {
 
 	const headers = cfHeader.data;
 	const destination = getDestinationForCountry(link, headers.country);
+
+	const queueMessage: LinkClickMessageType = {
+		"type": "LINK_CLICK",
+		"data": {
+			id: id,
+			// I just this to make the type happy, not sure what it's for or if it's the right field.
+			accountId: id,
+			country: headers.country,
+			destination:  link.accountId,
+			latitude: headers.latitude,
+			longitude: headers.longitude,
+			timestamp: new Date().toISOString(),
+		}
+	}
+	/**
+	 * This will take a few ms to send and get an ack from the queue with `await`
+	await c.env.QUEUE.send(queueMessage); // we could do //sendBatch() so that we can send many at once, if needed.
+	 we use waitUntil to ensure the serverless platform will do this without holding up the execution of the endpoint, we want to prioritize responsiveness
+	 this will run in the background; however, there are some edge cases where this doesn't work. If you need to ensure that we don't lose it, then DON'T USE THIS.
+	 it's great for less critical tasks like analytics
+	 */
+	c.executionCtx.waitUntil(
+		c.env.QUEUE.send(queueMessage)
+	)
 
 	return c.redirect(destination);
 })
