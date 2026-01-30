@@ -1,85 +1,99 @@
-import { getLink } from "@repo/data-ops/queries/links";
+// import { getLink } from "@repo/data-ops/queries/links";
 import { cloudflareInfoSchema } from "@repo/data-ops/zod-schema/links";
+import { Context, Data, Effect, Layer } from "effect";
 import { Hono } from "hono";
-import { ResultAsync } from "neverthrow";
 import {
 	getDestinationForCountry,
 	getRoutingDestinations,
 } from "@/helpers/route-ops";
 
+class NoLinkInfo extends Data.TaggedError("NoLinkInfo")<{}> {}
+class InvalidCloudflareHeaders extends Data.TaggedError(
+	"InvalidCloudflareHeaders",
+)<{}> {}
+
 export const App = new Hono<{ Bindings: Env }>();
 
 App.get("/:id", async (c) => {
+	return Effect.runPromise(
+		program.pipe(
+			Effect.provide(Layer.succeed(CloudFlareContext, c)),
+			Effect.match({
+				onFailure: (error) => {
+					switch (error._tag) {
+						case "KvNotFoundError":
+						case "KvFetchError":
+						case "JsonParseError":
+						case "ZodParseError":
+						case "NoLinkFoundError":
+						case "FetchLinkFromDBError":
+						case "SaveLinktoKVError":
+							return c.text("Routing destination error", 500);
+						case "NoLinkInfo":
+							return c.text("Destination not found", 404);
+						case "InvalidCloudflareHeaders":
+							return c.text("Invalid Cloudflare headers", 400);
+						default: {
+							// This will error if you don't handle all cases
+							const _exhaustive: never = error;
+							return _exhaustive;
+						}
+					}
+				},
+				onSuccess: (destination) => c.redirect(destination),
+			}),
+		),
+	);
+
+	// const id = c.req.param("id");
+
+	// const linkInfo = await getRoutingDestinations(c.env, id);
+	// if (!linkInfo) {
+	// 	return c.text("Destination not found", 404);
+	// }
+
+	// const cfHeader = cloudflareInfoSchema.safeParse(c.req.raw.cf);
+	// if (!cfHeader.success) {
+	// 	return c.text("Invalid Cloudflare headers", 400);
+	// }
+
+	// const headers = cfHeader.data;
+	// const destination = getDestinationForCountry(linkInfo, headers.country);
+
+	// return c.redirect(destination);
+});
+
+const program = Effect.gen(function* () {
+	const c = yield* CloudFlareContext;
 	const id = c.req.param("id");
 
-	const linkInfo = await getRoutingDestinations(c.env, id);
+	const linkInfo = yield* getRoutingDestinations(c.env, id);
+
 	if (!linkInfo) {
-		return c.text("Destination not found", 404);
+		return yield* new NoLinkInfo();
 	}
 
 	const cfHeader = cloudflareInfoSchema.safeParse(c.req.raw.cf);
 	if (!cfHeader.success) {
-		return c.text("Invalid Cloudflare headers", 400);
+		return yield* new InvalidCloudflareHeaders();
 	}
 
 	const headers = cfHeader.data;
 	const destination = getDestinationForCountry(linkInfo, headers.country);
 
-	return c.redirect(destination);
-
-	// ###
-
-	// const getLinkInfoFromDB = ResultAsync.fromThrowable(
-	// 	() => getLink(id),
-	// 	(error) => ({
-	// 		type: "Error fetching link info from DB" as const,
-	// 		details: JSON.stringify(error),
-	// 	}),
-	// );
-
-	// const result = await getLinkInfoFromDB();
-	// // 	.mapErr((error) => {
-	// // 	switch (error.type) {
-	// // 		case "Error fetching link info from DB":
-	// // 			return c.text(error.details, 500);
-	// // 		default: {
-	// // 			const _exhaustive: never = error.type;
-	// // 		}
-	// // 	}
-	// // });
-
-	// if (result.isErr()) {
-	// 	switch (result.error.type) {
-	// 		case "Error fetching link info from DB":
-	// 			return c.json({ error: result.error.details }, 500);
-	// 		default: {
-	// 			const _exhaustive: never = result.error.type;
-	// 		}
-	// 	}
-	// } else {
-	// 	if (result.value === null) {
-	// 		return c.text("Link not found", 404);
-	// 	}
-
-	// 	const cfHeader = cloudflareInfoSchema.safeParse(c.req.raw.cf);
-	// 	if (!cfHeader.success) {
-	// 		return c.text("Invalid Cloudflare header", 400);
-	// 	}
-
-	// 	const headers = cfHeader.data;
-	// 	const destination = getDestinationForCountry(result.value, headers.country);
-	// 	return c.redirect(destination);
-	// }
-
-	// ###
-
-	// const cf = c.req.raw.cf;
-	// const country = cf?.country;
-	// const lat = cf?.latitude;
-	// const long = cf?.longitude;
-	// return c.json({
-	// 	country,
-	// 	lat,
-	// 	long,
-	// });
+	// return c.redirect(destination);
+	return destination;
 });
+
+class CloudFlareContext extends Context.Tag("CloudFlareContext")<
+	CloudFlareContext,
+	{
+		req: {
+			param: (key: string) => string;
+			raw: { cf: unknown };
+		};
+		env: Env;
+		text: (body: string, status: number) => Response;
+		redirect: (url: string) => Response;
+	}
+>() {}

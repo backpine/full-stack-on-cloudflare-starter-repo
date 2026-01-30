@@ -18,8 +18,10 @@
 		"wrangler": "^4.59.3"
 	},
 	"dependencies": {
+		"@effect/language-service": "^0.72.0",
 		"@repo/data-ops": "workspace:*",
 		"ai": "^6.0.44",
+		"effect": "^3.19.15",
 		"hono": "^4.11.4",
 		"moment": "^2.30.1",
 		"neverthrow": "^8.2.0",

@@ -3,42 +3,95 @@ import {
 	type LinkSchemaType,
 	linkSchema,
 } from "@repo/data-ops/zod-schema/links";
+import { Effect } from "effect";
+import {
+	FetchLinkFromDBError,
+	JsonParseError,
+	KvFetchError,
+	KvNotFoundError,
+	NoLinkFoundError,
+	SaveLinktoKVError,
+	ZodParseError,
+} from "./errors";
 
-async function getLinkInfoFromKv(env: Env, id: string) {
-	const linkInfo = await env.CACHE.get(id);
-	if (!linkInfo) return null;
-	try {
-		const parsedLinkInfo = JSON.parse(linkInfo);
-		return linkSchema.parse(parsedLinkInfo);
-	} catch (error) {
-		return null;
-	}
-}
+const getLinkInfoFromKv = (env: Env, id: string) =>
+	Effect.gen(function* () {
+		const linkInfo = yield* Effect.tryPromise({
+			try: () => env.CACHE.get(id),
+			catch: (error) => new KvFetchError({ cause: error }),
+		});
+
+		if (!linkInfo) {
+			return yield* new KvNotFoundError({ id });
+		}
+
+		const parsedLinkInfo = yield* Effect.try({
+			try: () => JSON.parse(linkInfo),
+			catch: (error) => new JsonParseError({ cause: error }),
+		});
+
+		const LinkInfoFromKv = yield* Effect.try({
+			try: () => linkSchema.parse(parsedLinkInfo),
+			catch: (error) => new ZodParseError({ cause: error }),
+		});
+
+		return LinkInfoFromKv;
+	});
+
+// async function getLinkInfoFromKv(env: Env, id: string) {
+// 	const linkInfo = await env.CACHE.get(id);
+// 	if (!linkInfo) return null;
+// 	try {
+// 		const parsedLinkInfo = JSON.parse(linkInfo);
+// 		return linkSchema.parse(parsedLinkInfo);
+// 	} catch (error) {
+// 		return null;
+// 	}
+// }
 
 const TTL_TIME = 60 * 60 * 24; // 1 day
 
-async function saveLinkInfoToKv(
-	env: Env,
-	id: string,
-	linkInfo: LinkSchemaType,
-) {
-	try {
-		await env.CACHE.put(id, JSON.stringify(linkInfo), {
-			expirationTtl: TTL_TIME,
-		});
-	} catch (error) {
-		console.error("Error saving link info to KV:", error);
-	}
-}
+const saveLinkInfoToKv = (env: Env, id: string, linkInfo: LinkSchemaType) =>
+	Effect.tryPromise({
+		try: () =>
+			env.CACHE.put(id, JSON.stringify(linkInfo), {
+				expirationTtl: TTL_TIME,
+			}),
+		catch: (error) => new SaveLinktoKVError({ cause: error }),
+	});
 
-export async function getRoutingDestinations(env: Env, id: string) {
-	const linkInfo = await getLinkInfoFromKv(env, id);
-	if (linkInfo) return linkInfo;
-	const linkInfoFromDb = await getLink(id);
-	if (!linkInfoFromDb) return null;
-	await saveLinkInfoToKv(env, id, linkInfoFromDb);
-	return linkInfoFromDb;
-}
+// async function saveLinkInfoToKv(
+// 	env: Env,
+// 	id: string,
+// 	linkInfo: LinkSchemaType,
+// ) {
+// 	try {
+// 		await env.CACHE.put(id, JSON.stringify(linkInfo), {
+// 			expirationTtl: TTL_TIME,
+// 		});
+// 	} catch (error) {
+// 		console.error("Error saving link info to KV:", error);
+// 	}
+// }
+
+export const getRoutingDestinations = (env: Env, id: string) =>
+	Effect.gen(function* () {
+		const linkInfo = yield* getLinkInfoFromKv(env, id);
+		if (linkInfo) return linkInfo;
+
+		const linkInfoFromDb = yield* Effect.tryPromise({
+			try: () => getLink(id),
+			catch: (error) => new FetchLinkFromDBError({ cause: error }),
+		});
+
+		if (!linkInfoFromDb) {
+			return yield* new NoLinkFoundError();
+		}
+
+		yield* saveLinkInfoToKv(env, id, linkInfoFromDb);
+
+		return linkInfoFromDb;
+	});
 
 export function getDestinationForCountry(
 	linkInfo: LinkSchemaType,

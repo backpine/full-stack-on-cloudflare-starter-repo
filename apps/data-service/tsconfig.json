@@ -1,5 +1,13 @@
 {
 	"compilerOptions": {
+		/* Enable all strict type-checking options. */
+		"strict": true,
+		"plugins": [
+			{
+				"name": "@effect/language-service"
+			}
+		],
+		"noUncheckedIndexedAccess": true,
 		/* Visit https://aka.ms/tsconfig.json to read more about this file */
 
 		/* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
@@ -31,9 +39,6 @@
 		/* Ensure that casing is correct in imports. */
 		"forceConsistentCasingInFileNames": true,
 
-		/* Enable all strict type-checking options. */
-		"strict": true,
-
 		/* Skip type checking all .d.ts files. */
 		"skipLibCheck": true,
 		"types": ["./worker-configuration.d.ts", "./service-bindings.d.ts"],
@@ -43,5 +48,9 @@
 		}
 	},
 	"exclude": ["test"],
-	"include": ["worker-configuration.d.ts", "service-bindings.d.ts", "src/**/*.ts"]
+	"include": [
+		"worker-configuration.d.ts",
+		"service-bindings.d.ts",
+		"src/**/*.ts"
+	]
 }
