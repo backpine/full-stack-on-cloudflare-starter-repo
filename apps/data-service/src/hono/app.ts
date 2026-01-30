@@ -1,16 +1,17 @@
 // import { getLink } from "@repo/data-ops/queries/links";
 import { cloudflareInfoSchema } from "@repo/data-ops/zod-schema/links";
-import { Context, Data, Effect, Layer } from "effect";
+import { Data, Effect, Layer } from "effect";
 import { Hono } from "hono";
 import {
 	getDestinationForCountry,
 	getRoutingDestinations,
 } from "@/helpers/route-ops";
+import { CloudFlareContext } from "@/services";
 
-class NoLinkInfo extends Data.TaggedError("NoLinkInfo")<{}> {}
+class NoLinkInfo extends Data.TaggedError("NoLinkInfo") {}
 class InvalidCloudflareHeaders extends Data.TaggedError(
 	"InvalidCloudflareHeaders",
-)<{}> {}
+) {}
 
 export const App = new Hono<{ Bindings: Env }>();
 
@@ -28,7 +29,7 @@ App.get("/:id", async (c) => {
 						case "NoLinkFoundError":
 						case "FetchLinkFromDBError":
 						case "SaveLinktoKVError":
-							return c.text("Routing destination error", 500);
+							return c.text(`Routing destination error: ${error._tag}`, 500);
 						case "NoLinkInfo":
 							return c.text("Destination not found", 404);
 						case "InvalidCloudflareHeaders":
@@ -67,7 +68,7 @@ const program = Effect.gen(function* () {
 	const c = yield* CloudFlareContext;
 	const id = c.req.param("id");
 
-	const linkInfo = yield* getRoutingDestinations(c.env, id);
+	const linkInfo = yield* getRoutingDestinations(id);
 
 	if (!linkInfo) {
 		return yield* new NoLinkInfo();
@@ -84,16 +85,3 @@ const program = Effect.gen(function* () {
 	// return c.redirect(destination);
 	return destination;
 });
-
-class CloudFlareContext extends Context.Tag("CloudFlareContext")<
-	CloudFlareContext,
-	{
-		req: {
-			param: (key: string) => string;
-			raw: { cf: unknown };
-		};
-		env: Env;
-		text: (body: string, status: number) => Response;
-		redirect: (url: string) => Response;
-	}
->() {}

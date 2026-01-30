@@ -4,6 +4,7 @@ import {
 	linkSchema,
 } from "@repo/data-ops/zod-schema/links";
 import { Effect } from "effect";
+import { CloudFlareContext } from "@/services";
 import {
 	FetchLinkFromDBError,
 	JsonParseError,
@@ -14,10 +15,12 @@ import {
 	ZodParseError,
 } from "./errors";
 
-const getLinkInfoFromKv = (env: Env, id: string) =>
+// const getLinkInfoFromKv = (env: Env, id: string) =>
+const getLinkInfoFromKv = (id: string) =>
 	Effect.gen(function* () {
+		const c = yield* CloudFlareContext;
 		const linkInfo = yield* Effect.tryPromise({
-			try: () => env.CACHE.get(id),
+			try: () => c.env.CACHE.get(id),
 			catch: (error) => new KvFetchError({ cause: error }),
 		});
 
@@ -74,9 +77,11 @@ const saveLinkInfoToKv = (env: Env, id: string, linkInfo: LinkSchemaType) =>
 // 	}
 // }
 
-export const getRoutingDestinations = (env: Env, id: string) =>
+export const getRoutingDestinations = (id: string) =>
 	Effect.gen(function* () {
-		const linkInfo = yield* getLinkInfoFromKv(env, id);
+		const c = yield* CloudFlareContext;
+		// const linkInfo = yield* getLinkInfoFromKv(env, id);
+		const linkInfo = yield* getLinkInfoFromKv(id);
 		if (linkInfo) return linkInfo;
 
 		const linkInfoFromDb = yield* Effect.tryPromise({
@@ -88,7 +93,7 @@ export const getRoutingDestinations = (env: Env, id: string) =>
 			return yield* new NoLinkFoundError();
 		}
 
-		yield* saveLinkInfoToKv(env, id, linkInfoFromDb);
+		yield* saveLinkInfoToKv(c.env, id, linkInfoFromDb);
 
 		return linkInfoFromDb;
 	});

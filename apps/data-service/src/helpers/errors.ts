@@ -20,9 +20,7 @@ export class FetchLinkFromDBError extends Data.TaggedError(
 	cause: unknown;
 }> {}
 
-export class NoLinkFoundError extends Data.TaggedError(
-	"NoLinkFoundError",
-)<{}> {}
+export class NoLinkFoundError extends Data.TaggedError("NoLinkFoundError") {}
 
 export class SaveLinktoKVError extends Data.TaggedError("SaveLinktoKVError")<{
 	cause: unknown;
