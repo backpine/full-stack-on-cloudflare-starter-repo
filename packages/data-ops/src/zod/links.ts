@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// these are the destinations a link can route to
 export const destinationsSchema = z.preprocess(
   (obj) => {
     if (typeof obj === "string") {
@@ -25,6 +26,7 @@ export const linkSchema = z.object({
   created: z.string(),
   updated: z.string(),
 });
+// accountId is omitted b/c it's passed by TRPC route on the controller
 export const createLinkSchema = linkSchema.omit({
   created: true,
   updated: true,
@@ -32,6 +34,9 @@ export const createLinkSchema = linkSchema.omit({
   linkId: true,
 });
 
+/**
+ * This comes from the raw request headers
+ */
 export const cloudflareInfoSchema = z.object({
   country: z.string().optional(),
   latitude: z

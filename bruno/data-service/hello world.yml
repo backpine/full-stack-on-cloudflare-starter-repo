@@ -1,0 +1,36 @@
+info:
+  name: hello world
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{api}}/hello-worl"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: example
+    request:
+      url: "{{api}}/hello-worl"
+      method: GET
+    response:
+      statusText: OK
+      headers:
+        - name: transfer-encoding
+          value: chunked
+        - name: content-type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "country": "US",
+            "lat": "27.93789",
+            "lng": "-82.23644"
+          }

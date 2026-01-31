@@ -5,13 +5,17 @@
   "scripts": {
     "build-package": "pnpm --filter @repo/data-ops run build",
     "dev-frontend": "pnpm --filter user-application run dev",
-    "dev-data-service": "pnpm --filter data-service run dev"
+    "dev-data-service": "pnpm --filter data-service run dev",
+    "dev": "concurrently \"pnpm run dev-frontend\" \"pnpm run dev-data-service\"",
+    "deploy:all": "pnpm run build-package && pnpm --filter data-service --filter user-application run deploy",
+    "cf-typegen": "pnpm --filter \"./apps/**\" run cf-typegen"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.19.7",
+    "concurrently": "^9.2.1",
     "typescript": "^5.9.3"
   }
 }
