@@ -3,6 +3,8 @@ import {App} from "./hono/app";
 import {initDatabase} from "@repo/data-ops/database";
 import {QueueMessageSchema} from "@repo/data-ops/zod-schema/queue";
 import {handleLinkClick} from "@/queue-handlers/link-clicks";
+// export so it's available for cloudflare serverless
+export { DestinationEvaluationWorkflow } from "@/workflows/destination-evaluation-workflow";
 
 /**
  * This is a worker entry point. It's a class based setup
