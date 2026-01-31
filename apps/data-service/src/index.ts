@@ -31,6 +31,8 @@ export default class DataService extends WorkerEntrypoint<Env> {
 	 * @param batch
 	 */
 	async queue(batch: MessageBatch<unknown>) {
+		// you can check the name of the queue this way
+		// batch.queue
 		for (const message of batch.messages) {
 			console.log("Queue Event: ", message.body);
 			// we parse it to ensure it's of a certain type. We only want to handle messages we support
@@ -38,8 +40,9 @@ export default class DataService extends WorkerEntrypoint<Env> {
 			if (parsedEvent.success) {
 				const event = parsedEvent.data;
 				if (event.type === "LINK_CLICK") {
-					// await handleLinkClick(this.env, event)
-					throw new Error("Test Error For Dead Letter Queue");
+					await handleLinkClick(this.env, event)
+					// removing the faux error
+					// throw new Error("Test Error For Dead Letter Queue");
 				}
 			} else {
 				// you could take this to some reporting app like sentry or in your own database

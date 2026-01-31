@@ -39,6 +39,13 @@
 				* This is the delay between retries
 				*/
 //				"retry_delay": 5
+			},
+			/**
+			* Consume from the dead letter queue
+			*/
+			{
+				"queue": "smart-links-data-dead-letter-stage",
+				"retry_delay": 0
 			}
 		],
 		"producers": [
