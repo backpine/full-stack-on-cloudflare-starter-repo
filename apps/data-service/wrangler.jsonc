@@ -28,7 +28,17 @@
 	"queues": {
 		"consumers": [
 			{
-				"queue": "smart-links-data-queue-stage"
+				"queue": "smart-links-data-queue-stage",
+				"dead_letter_queue": "smart-links-data-dead-letter-stage"
+				/**
+				There are times you don't want to retry (ai, video gen, expensive apis)
+				However, there are times you do want to retry (analytics, etc)
+				*/
+//				"max_retries": 3
+				/**
+				* This is the delay between retries
+				*/
+//				"retry_delay": 5
 			}
 		],
 		"producers": [

@@ -38,7 +38,8 @@ export default class DataService extends WorkerEntrypoint<Env> {
 			if (parsedEvent.success) {
 				const event = parsedEvent.data;
 				if (event.type === "LINK_CLICK") {
-					await handleLinkClick(this.env, event)
+					// await handleLinkClick(this.env, event)
+					throw new Error("Test Error For Dead Letter Queue");
 				}
 			} else {
 				// you could take this to some reporting app like sentry or in your own database
