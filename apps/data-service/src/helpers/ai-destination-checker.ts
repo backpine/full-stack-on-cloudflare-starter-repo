@@ -2,12 +2,10 @@ import { generateObject } from 'ai';
 import { createWorkersAI } from 'workers-ai-provider';
 import { z } from 'zod';
 
-/**
- */
 export async function aiDestinationChecker(env: Env, bodyText: string) {
 	const workersAi = createWorkersAI({ binding: env.AI });
 	const result = await generateObject({
-		model: workersAi('@cf/meta/llama-3.2-3b-instruct'),
+		model: workersai('@cf/meta/llama-3.1-8b-instruct'),
 		prompt:
 			`You will analyze the provided webpage content and determine if it reflects a product that is currently available, not available, or if the status is unclear.
 
@@ -25,15 +23,11 @@ export async function aiDestinationChecker(env: Env, bodyText: string) {
 		system:
 			`You are an AI assistant for ecommerce analysis. Your job is to determine if the product on a webpage is available, not available, or if its status is unclear, based solely on the provided text. Be concise and base your reasoning on specific evidence from the content. Do not guess if information is insufficient.
 			`.trim(),
-		/**
-		 * We defined the output schema for the AI response.
-		 */
 		schema: z
 			.object({
 				pageStatus: z
 					.object({
 						status: z.enum(['AVAILABLE_PRODUCT', 'NOT_AVAILABLE_PRODUCT', 'UNKNOWN_STATUS'], {
-							// this provides further context to the model for what you're looking for. it's extra help for how to tag
 							description: `
 								Indicates the product's availability on the page:
 								- AVAILABLE_PRODUCT: The product appears available for purchase.
@@ -41,7 +35,6 @@ export async function aiDestinationChecker(env: Env, bodyText: string) {
 								- UNKNOWN_STATUS: The status could not be determined from the text.
 								`.trim(),
 						}),
-						// when asking it why it tags, it will do a better job at tagging, even if it's a one-liner
 						statusReason: z.string().describe(
 							`A concise explanation citing specific words, phrases, or patterns from the content that led to this status. If status is UNKNOWN_STATUS, explain what was missing or ambiguous.
 							`.trim(),
@@ -57,3 +50,4 @@ export async function aiDestinationChecker(env: Env, bodyText: string) {
 		statusReason: result.object.pageStatus.statusReason,
 	};
 }
+
