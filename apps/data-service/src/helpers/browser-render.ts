@@ -4,12 +4,12 @@ export async function collectDestinationInfo(env: Env, destinationUrl: string) {
 	/**
 	 * This is the cloudflare way of standing up a browser
 	 */
-	const browser = await puppeteer.launch(this.env.VIRTUAL_BROWSER)
+	const browser = await puppeteer.launch(env.VIRTUAL_BROWSER)
 
 	// now we can do other browser specific things
 	const page = await browser.newPage();
 	// make sure the service bindings updates to have url
-	const response = await page.goto(event.payload.destinationUrl);
+	const response = await page.goto(destinationUrl);
 
 	await page.waitForNetworkIdle();
 
