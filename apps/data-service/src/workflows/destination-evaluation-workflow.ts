@@ -12,6 +12,7 @@ export class DestinationEvaluationWorkflow extends WorkflowEntrypoint<Env, Desti
 			return collectDestinationInfo(this.env, event.payload.destinationUrl);
 		});
 
+		// we are going to pass this along to an ai workflow
 		console.log(collectedData);
 	}
 }
