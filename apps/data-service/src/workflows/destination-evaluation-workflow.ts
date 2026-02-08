@@ -36,9 +36,9 @@ export class DestinationEvaluationWorkflow extends WorkflowEntrypoint<Env, Desti
 
 /**
  * Example input params:
- * {
- * "linkid": "testid",
- * "destinationUrl": "https://www.aliexpress.us/item/3256807855533534.html?spm=a2g0o.productlist.main.2.4ac2129cS7Fw5l&algo_pvid=d9a18b39-b111-43ba-a164-2303b305b51f&algo_exp_id=d9a18b39-b111-43ba-a164-2303b305b51f-1&pdp_ext_f={%22order%22%3A%22610%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22}&pdp_npi=6%40dis!USD!1043.75!252.34!!!7203.24!1741.48!%402103212b17705165836294275ea4fa!12000043612523513!sea!US!0!ABX!1!0!n_tag%3A-29910%3Bd%3Aae9494bd%3Bm03_new_user%3A-29895%3BpisId%3A5000000200565977&curPageLogUid=LqtsSI5gs6yg&utparam-url=scene%3Asearch|query_from%3A|x_object_id%3A1005008041848286|_p_origin_prod%3A",
- * "accountId": "testaccoundid"
- * }
+  {
+  "linkid": "testid",
+  "destinationUrl": "https://www.aliexpress.us/item/3256807855533534.html?spm=a2g0o.productlist.main.2.4ac2129cS7Fw5l&algo_pvid=d9a18b39-b111-43ba-a164-2303b305b51f&algo_exp_id=d9a18b39-b111-43ba-a164-2303b305b51f-1&pdp_ext_f={%22order%22%3A%22610%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22}&pdp_npi=6%40dis!USD!1043.75!252.34!!!7203.24!1741.48!%402103212b17705165836294275ea4fa!12000043612523513!sea!US!0!ABX!1!0!n_tag%3A-29910%3Bd%3Aae9494bd%3Bm03_new_user%3A-29895%3BpisId%3A5000000200565977&curPageLogUid=LqtsSI5gs6yg&utparam-url=scene%3Asearch|query_from%3A|x_object_id%3A1005008041848286|_p_origin_prod%3A",
+  "accountId": "testaccoundid"
+  }
  */
