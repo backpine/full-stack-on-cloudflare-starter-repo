@@ -20,6 +20,9 @@ export const LinkClickMessageSchema = BaseQueueMessageSchema.extend({
   }),
 });
 
+/**
+ * This will look at the data and tell that the object is valid on a certain type
+ */
 export const QueueMessageSchema = z.discriminatedUnion("type", [
   LinkClickMessageSchema,
 ]);

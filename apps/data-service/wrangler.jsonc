@@ -9,6 +9,72 @@
 	"compatibility_date": "2025-06-17",
 	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
-		"enabled": true,
+		"enabled": true
 	},
+	"browser": {
+		"binding": "VIRTUAL_BROWSER"
+	},
+	"ai": {
+		"binding": "AI"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_id": "fe1a2999-90ed-456e-9908-ed53ac4bc8bf",
+			"remote": true
+		}
+	],
+	// this is just for workflows, we aren't reading files in the app
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "smart-links-eval-stage",
+
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "CACHE",
+			"id": "3e3c3f86ef414f8ea08e7144f5697e29",
+			"remote": true
+		}
+	],
+	"queues": {
+		"consumers": [
+			{
+				"queue": "smart-links-data-queue-stage",
+				"dead_letter_queue": "smart-links-data-dead-letter-stage"
+				/**
+				There are times you don't want to retry (ai, video gen, expensive apis)
+				However, there are times you do want to retry (analytics, etc)
+				*/
+//				"max_retries": 3
+				/**
+				* This is the delay between retries
+				*/
+//				"retry_delay": 5
+			},
+			/**
+			* Consume from the dead letter queue
+			*/
+			{
+				"queue": "smart-links-data-dead-letter-stage",
+				"retry_delay": 0
+			}
+		],
+		"producers": [
+			{
+				// this is how we access it in the code
+				"binding": "QUEUE",
+				"queue": "smart-links-data-queue-stage"
+			}
+		]
+	},
+	"workflows": [
+		{
+			"binding": "DESINATION_EVALUATION_WORKFLOW",
+			"name": "destination-evaluation-workflow",
+			"class_name": "DestinationEvaluationWorkflow"
+		}
+	]
 }

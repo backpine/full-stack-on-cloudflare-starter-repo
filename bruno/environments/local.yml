@@ -1,0 +1,4 @@
+name: local
+variables:
+  - name: api
+    value: http://localhost:8787
