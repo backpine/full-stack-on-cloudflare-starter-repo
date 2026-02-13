@@ -1,6 +1,7 @@
 import { WorkflowEntrypoint, WorkflowEvent, WorkflowStep } from 'cloudflare:workers';
 import {collectDestinationInfo} from "@/helpers/browser-render";
 import {aiDestinationChecker} from "@/helpers/ai-destination-checker";
+import { addEvaluation } from "@repo/data-ops/queries/evalutations";
 
 
 /**
@@ -28,6 +29,17 @@ export class DestinationEvaluationWorkflow extends WorkflowEntrypoint<Env, Desti
 				return await aiDestinationChecker(this.env, collectedData.bodyText);
 			},
 		);
+
+		// we save this into an object store to bypass limits for workflows
+		const evaluationId = await step.do('Save evaluation in database', async () => {
+			return await addEvaluation({
+				linkId: event.payload.linkId,
+				status: aiStatus.status,
+				reason: aiStatus.statusReason,
+				accountId: event.payload.accountId,
+				destinationUrl: event.payload.destinationUrl,
+			});
+		});
 
 		console.log(collectedData);
 		console.log(aiStatus);
