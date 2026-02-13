@@ -2,7 +2,7 @@ import { WorkflowEntrypoint, WorkflowEvent, WorkflowStep } from 'cloudflare:work
 import {collectDestinationInfo} from "@/helpers/browser-render";
 import {aiDestinationChecker} from "@/helpers/ai-destination-checker";
 import { addEvaluation } from "@repo/data-ops/queries/evalutations";
-
+import { initDatabase } from '@repo/data-ops/database';
 
 /**
  * This is to tap into the workflow engine. It's using the DestinationStatus... from the service bindings
@@ -10,6 +10,7 @@ import { addEvaluation } from "@repo/data-ops/queries/evalutations";
  */
 export class DestinationEvaluationWorkflow extends WorkflowEntrypoint<Env, DestinationStatusEvaluationParams> {
 	async run(event: Readonly<WorkflowEvent<DestinationStatusEvaluationParams>>, step: WorkflowStep) {
+		initDatabase(this.env.DB)
 
 		const collectedData = await step.do("Collect rendered destination page data", async () => {
 			return collectDestinationInfo(this.env, event.payload.destinationUrl);
