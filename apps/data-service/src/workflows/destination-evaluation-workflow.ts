@@ -44,7 +44,7 @@ export class DestinationEvaluationWorkflow extends WorkflowEntrypoint<Env, Desti
 
 		await step.do('Backup destination HTML in R2', async () => {
 			const accountId = event.payload.accountId;
-			// file extensions really aren't necessary
+			// file extensions really aren't necessary, but we put it into a folder (invert the path to be of the type)
 			const r2PathHtml = `evaluations/${accountId}/html/${evaluationId}`;
 			const r2PathBodyText = `evaluations/${accountId}/body-text/${evaluationId}`;
 			await this.env.BUCKET.put(r2PathHtml, collectedData.html)
