@@ -8,6 +8,7 @@
     "dev-data-service": "pnpm --filter data-service run dev",
     "dev": "concurrently \"pnpm run dev-frontend\" \"pnpm run dev-data-service\"",
     "deploy:all": "pnpm run build-package && pnpm --filter data-service --filter user-application run deploy",
+    "deploy": "pnpm run build-package && pnpm --filter data-service run deploy",
     "cf-typegen": "pnpm --filter \"./apps/**\" run cf-typegen"
   },
   "keywords": [],
