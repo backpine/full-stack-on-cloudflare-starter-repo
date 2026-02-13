@@ -24,6 +24,14 @@
 			"remote": true
 		}
 	],
+	// this is just for workflows, we aren't reading files in the app
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "smart-links-eval-stage",
+
+		}
+	],
 	"kv_namespaces": [
 		{
 			"binding": "CACHE",
