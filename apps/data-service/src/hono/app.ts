@@ -5,21 +5,22 @@ import { LinkClickMessageType } from "@repo/data-ops/zod-schema/queue";
 
 export const App = new Hono<{Bindings: Env}>();
 
-App.get("/do/:name", async (c) => {
-	const name = c.req.param("name");
-	const doId = c.env.EVALUATION_SCHEDULER.idFromName(name);
-
-
-	const stub = c.env.EVALUATION_SCHEDULER.get(doId);
-	// we now have an instance of the DO
-	await stub.increment();
-
-	const count = await stub.getCount();
-
-	return c.json({
-		count
-	});
-})
+// This was the original version of this which was a hello world of the DO
+// App.get("/do/:name", async (c) => {
+// 	const name = c.req.param("name");
+// 	const doId = c.env.EVALUATION_SCHEDULER.idFromName(name);
+//
+//
+// 	const stub = c.env.EVALUATION_SCHEDULER.get(doId);
+// 	// we now have an instance of the DO
+// 	await stub.increment();
+//
+// 	const count = await stub.getCount();
+//
+// 	return c.json({
+// 		count
+// 	});
+// })
 
 /**
  * We redirect the user AND kick off a fire and forget event on the queue so that this redirect is fast as possible
