@@ -42,6 +42,16 @@ export class DestinationEvaluationWorkflow extends WorkflowEntrypoint<Env, Desti
 			});
 		});
 
+		await step.do('Backup destination HTML in R2', async () => {
+			const accountId = event.payload.accountId;
+			// file extensions really aren't necessary
+			const r2PathHtml = `evaluations/${accountId}/html/${evaluationId}`;
+			const r2PathBodyText = `evaluations/${accountId}/body-text/${evaluationId}`;
+			await this.env.BUCKET.put(r2PathHtml, collectedData.html)
+			await this.env.BUCKET.put(r2PathBodyText, collectedData.bodyText)
+
+		})
+
 		console.log(collectedData);
 		console.log(aiStatus);
 	}
