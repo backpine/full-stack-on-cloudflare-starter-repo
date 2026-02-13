@@ -76,5 +76,22 @@
 			"name": "destination-evaluation-workflow",
 			"class_name": "DestinationEvaluationWorkflow"
 		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "EVALUATION_SCHEDULER",
+				"class_name": "EvaluationScheduler"
+			}
+		]
+	},
+	"migrations": [
+		{
+			// this is to track the version of durable object
+			"tag": "v1",
+			"new_classes": [
+				"EvaluationScheduler"
+			]
+		}
 	]
 }

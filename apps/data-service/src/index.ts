@@ -5,6 +5,7 @@ import {QueueMessageSchema} from "@repo/data-ops/zod-schema/queue";
 import {handleLinkClick} from "@/queue-handlers/link-clicks";
 // export so it's available for cloudflare serverless
 export { DestinationEvaluationWorkflow } from "@/workflows/destination-evaluation-workflow";
+export { EvaluationScheduler } from "@/durable-objects/evaluation-scheduler";
 
 /**
  * This is a worker entry point. It's a class based setup
