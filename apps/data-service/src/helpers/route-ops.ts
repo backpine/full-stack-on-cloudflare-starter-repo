@@ -18,9 +18,9 @@ async function getLinkInfoFromKv(env: Env, id: string) {
 
 const TTL_TIME_ONE_DAY = 60 * 60 * 24 // 1 day
 
-async function saveLinkInfoToKv(env: Env, id: string, linkInfo: LinkSchemaType) {
+async function saveLinkInfoToKv(env: Env, linkId: string, linkInfo: LinkSchemaType) {
 	try {
-		await env.CACHE.put(id, JSON.stringify(linkInfo),
+		await env.CACHE.put(linkId, JSON.stringify(linkInfo),
 			{
 				// automatic cleanup at a later date
 				expirationTtl: TTL_TIME_ONE_DAY
@@ -32,14 +32,14 @@ async function saveLinkInfoToKv(env: Env, id: string, linkInfo: LinkSchemaType) 
 }
 
 
-export async function getRoutingDestinations(env: Env, id: string) {
-	const linkInfo = await getLinkInfoFromKv(env, id);
+export async function getRoutingDestinations(env: Env, linkId: string) {
+	const linkInfo = await getLinkInfoFromKv(env, linkId);
 	if (linkInfo) return linkInfo;
-	const linkInfoFromDb = await getLink(id);
+	const linkInfoFromDb = await getLink(linkId);
 	if (!linkInfoFromDb) {
 		return null;
 	}
-	await saveLinkInfoToKv(env, id, linkInfoFromDb);
+	await saveLinkInfoToKv(env, linkId, linkInfoFromDb);
 	return linkInfoFromDb
 }
 

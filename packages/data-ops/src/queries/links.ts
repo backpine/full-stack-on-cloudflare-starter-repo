@@ -1,6 +1,6 @@
 import { getDb } from "@/db/database";
 import {linkClicks, links, type Link} from "@/drizzle-out/schema";
-import { CreateLinkSchemaType, destinationsSchema, DestinationsSchemaType, linkSchema } from "@/zod/links";
+import { CreateLinkSchemaType, destinationsSchema, DestinationsSchemaType, linkSchema, LinkSchemaType } from "@/zod/links";
 import { and, desc, eq, gt } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import {LinkClickMessageType} from "@/zod/queue";
@@ -63,7 +63,7 @@ export async function updateLinkName(linkId: string, name: string) {
 }
 
 
-export async function getLink(linkId: string) {
+export async function getLink(linkId: string): Promise<LinkSchemaType | null> {
     const db = getDb();
 
     const result: Link[] = await db
