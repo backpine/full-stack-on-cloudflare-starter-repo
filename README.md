@@ -1,4 +1,11 @@
 # cf-services-the-course-playground
+## Testing
+Hit the data-service for the redirect
+The user-application is just UI layer with trpc binding it
+
+
+Example
+https://data-service.noisy-resonance-8ddf.workers.dev/MEr0m3adWn
 
 [Course videos](https://learn.backpine.com/full-stack-on-cloudflare/687af278-494d-4375-977f-cb4303da1c48)
 [Course repo](https://github.com/backpine/full-stack-on-cloudflare-starter-repo)
