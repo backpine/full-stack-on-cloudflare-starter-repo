@@ -10,6 +10,8 @@ export const links = sqliteTable("links", {
 	name: text().notNull(),
 });
 
+export type Link = typeof links.$inferSelect
+
 export const linkClicks = sqliteTable("link_clicks", {
 	id: text().notNull(),
 	accountId: text("account_id").notNull(),

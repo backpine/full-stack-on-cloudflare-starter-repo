@@ -36,7 +36,9 @@ export async function getRoutingDestinations(env: Env, id: string) {
 	const linkInfo = await getLinkInfoFromKv(env, id);
 	if (linkInfo) return linkInfo;
 	const linkInfoFromDb = await getLink(id);
-	if (!linkInfoFromDb) return null;
+	if (!linkInfoFromDb) {
+		return null;
+	}
 	await saveLinkInfoToKv(env, id, linkInfoFromDb);
 	return linkInfoFromDb
 }

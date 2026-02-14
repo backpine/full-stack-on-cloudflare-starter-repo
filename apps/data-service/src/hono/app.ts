@@ -48,7 +48,7 @@ App.get('/:id', async (c) => {
 			// I just this to make the type happy, not sure what it's for or if it's the right field.
 			accountId: id,
 			country: headers.country,
-			destination:  link.accountId,
+			destination:  link.destinations,
 			latitude: headers.latitude,
 			longitude: headers.longitude,
 			timestamp: new Date().toISOString(),
